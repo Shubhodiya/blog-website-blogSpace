@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Link} from 'react-router-dom'
 import {
     Flex,
@@ -13,8 +13,28 @@ import {
     Text,
     useColorModeValue,
   } from '@chakra-ui/react';
+import axios from 'axios';
   
   export default function Login() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+
+    const [error, setError] = useState(false);
+    const handleSubmit= async (e)=>{
+      setError(false)
+      e.preventDefault();
+      try{
+      const res = await axios.post("/auth/register", {
+        username,
+        email, 
+        password
+      })
+      res.data && window.location.replace("/login")
+    }catch(err){
+      setError(true)
+    }
+    }
     return (
       <Flex
         p="0"
@@ -26,25 +46,22 @@ import {
           <Stack align={'center'}>
             <Heading fontSize={'4xl'} align={'center'}>Welcome to BlogSpace;</Heading>
           </Stack>
-          <Box
-            rounded={'lg'}
-            bg={useColorModeValue('white', 'gray.700')}
-            boxShadow={'lg'}
-            p={8}>
+          <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
             <Stack spacing={4}>
-            <FormControl id="firstName" isRequired>
+            <form onSubmit={handleSubmit}>
+            <FormControl id="firstName" isRequired my={5}>
                 <FormLabel>Name</FormLabel>
-                <Input placeholder="John Doe" type="text" />
+                <Input placeholder="John Doe" type="text"  onChange={e=>setUsername(e.target.value)} />
             </FormControl>
-              <FormControl id="email" isRequired>
+              <FormControl id="email" isRequired my={5}>
                 <FormLabel>Email</FormLabel>
-                <Input placeholder="john.doe@email.com" type="email" />
+                <Input placeholder="john.doe@email.com" type="email" onChange={e=>setEmail(e.target.value)}/>
               </FormControl>
-              <FormControl id="password" isRequired>
+              <FormControl id="password" isRequired my={5}>
                 <FormLabel>Password</FormLabel>
-                <Input placeholder="********" type="password" />
-              </FormControl>
-              <Stack spacing={10}>
+                <Input placeholder="********" type="password" onChange={e=>setPassword(e.target.value)}/>
+              </FormControl >
+              <Stack spacing={2}>
                 <Stack
                   direction={{ base: 'column', sm: 'row' }}
                   align={'start'}
@@ -55,11 +72,13 @@ import {
                   color={'white'}
                   _hover={{
                     bg: 'blue.500',
-                  }}>
+                  }} type={"submit"}>
                   Create Account
                 </Button>
+                {error && <Text as="span" color={'red.300'} m={0} p={0}>Something went wrong, try using a new username</Text>}
                 <Text>Already have an account?<Text as="span" color={'blue.400'}><Link to="/login" className="link"> Login</Link></Text></Text>
               </Stack>
+              </form>
             </Stack>
           </Box>
         </Stack>

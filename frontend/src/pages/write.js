@@ -19,21 +19,58 @@ import {
   FormLabel,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
+import axios from 'axios';
+import { Context } from '../context/Context';
 
 const Write = ()=>{
+    const {user, dispatch} = useContext(Context);
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const [file, setFile] = useState("");
+
+    const handleSubmit= async (e)=>{
+        e.preventDefault();
+        const newPost = {
+            username: user.username,
+            title, 
+            desc
+        };
+        if(file){
+            const data = new FormData();
+            const filename = Date.now()+file.name;
+            data.append("name", filename);
+            data.append("file", file);
+            newPost.postCover = filename;
+            try{
+                await axios.post("/upload", data);
+            }catch(err){
+                console.log(err)
+            }
+        }
+        try{
+            const res = await axios.post("/posts", newPost);
+            window.location.replace("/post/"+res.data._id);
+        }catch(err){
+            console.log(err);
+        }
+    };
+
     return(
         <Flex >
             <Center w={"100%"}>
             <VStack w={"90%"} py={10}>
-            <Image src={"https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" }
+            { file && (
+                <Image src={URL.createObjectURL(file)}
                 w={"100%"}
                 h={"200px"}
                 borderRadius={5} 
                 style={{objectFit: "cover"}}
-            />
-            <FormControl id="postCover">
+            />)}
+            <form  w={"100%"} py={10} onSubmit={handleSubmit}>
+            <FormControl w={"90vw"} py={10} id="postCover">
                 <FormLabel htmlFor="postCover" cursor={"pointer"} ><Text as="span" ><AddIcon/></Text></FormLabel>
-                <Input type="file" id="postCover" display={"none"}/>
+                <Input type="file" name="file" id="postCover" display={"none"} onChange={e=>setFile(e.target.files[0])}/>
             </FormControl>
             <FormControl id="title" isRequired>
                 <FormLabel >Title</FormLabel>
@@ -41,21 +78,26 @@ const Write = ()=>{
                 placeholder="Enter blog title here" 
                 type="text" 
                 border ={"none"}
+                onChange={e=>setTitle(e.target.value)}
                 />
             </FormControl>
             <FormControl id="desc" isRequired>
                 <FormLabel >Description</FormLabel>
                 <Textarea placeholder="Start writing here..." 
+                onChange={e=>setDesc(e.target.value)}
                 type="text" 
                 border ={"none"}
                 height={"180px"}/>
             </FormControl>
             <Button bg={'blue.400'}
-                  color={'white'}
-                  _hover={{
-                    bg: 'blue.500',
-                  }}>Publish Post</Button>
-              
+                type={"submit"}
+                color={'white'}
+                _hover={{
+                bg: 'blue.500',   
+            }}>
+                Publish Post
+                </Button>
+              </form>
                 <Divider py ={10} my={10}/>
             </VStack>
             </Center>

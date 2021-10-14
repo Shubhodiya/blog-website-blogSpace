@@ -5,6 +5,7 @@ import {
     Image,
     Stack,
     Text,
+    Box,
     useBreakpointValue,
   } from '@chakra-ui/react';
   import {Link} from 'react-router-dom'
@@ -12,11 +13,11 @@ import {
   
   export default function Hero() {
     return (
-      <Stack minH={'70vh'} direction={{ base: 'column', md: 'row' }}>
+      <Stack minH={'75vh'} direction={{ base: 'column', md: 'row' }}>
         <Flex p={8} flex={1} align={'center'} justify={'center'}>
           <Stack spacing={6} w={'full'} maxW={'lg'}>
-            <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-              <Text
+            <Box fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+              <Heading><Text
                 as={'span'}
                 position={'relative'}
                 _after={{
@@ -30,11 +31,12 @@ import {
                 }}>
                Welcome to
               </Text>
-              <br />{' '}
+              <br />{' '}</Heading>
+
               <Heading color={'blue.400'} as={'h2'} size="3xl">
               BlogSpace;
               </Heading>{' '}
-            </Heading>
+              </Box>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
               The project board is an exclusive resource for contract work. It's
               perfect for freelancers, agencies, and moonlighters.
