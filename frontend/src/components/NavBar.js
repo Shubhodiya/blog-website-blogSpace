@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import React, { useContext } from 'react';
+import { FaUserCircle } from "react-icons/fa";
 import {
     Divider,
     Box,
     Heading,
     Text,
     Flex,
+    Image,
     Wrap,
     WrapItem,
     Spacer,
@@ -15,10 +17,10 @@ import {
   } from '@chakra-ui/react';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { Context } from "../context/Context";
-
+const PF = "http://localhost:5000/images/"
 const NavBar = () =>{
    const {user, dispatch} = useContext(Context);
-   
+   console.log(user)
    const handleLogout=()=>{
     dispatch({type:"LOGOUT"});
    }
@@ -49,14 +51,18 @@ const NavBar = () =>{
               <Link to ="/login"><Center  h="10" m="2"> <Text size="md"> Login</Text> </Center></Link>
             </WrapItem>
             }
+            {user ?
+            <WrapItem>
+              <Link to ="/settings"><Center h="10" m="2"> <Text size="md">  {user.profilePic ? <Image src={PF+user.profilePic} height={"35px"} width={"35px"} borderRadius={"50%"}/> : <FaUserCircle size={25}/> } </Text></Center></Link>
+            </WrapItem>
+            : ""
+          }
             {!user ? 
             <WrapItem>
               <Link to ="/register"><Center  h="10" m="2"> <Text size="md"> Register</Text> </Center></Link>
             </WrapItem>
             :""
             }
-   
-            
               <Center><ColorModeSwitcher justifySelf="flex-end" /></Center>
           </Wrap>
           </Box>

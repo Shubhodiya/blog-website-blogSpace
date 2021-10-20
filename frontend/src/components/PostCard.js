@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 
 export default function PostCard({post}) {
-    // console.log(post)
-    const PF = "http://localhost:5000/images/"
+    console.log(post)
+    const PF = "http://localhost:5000/images/";
     return (
       
     <Center py={6}>
@@ -48,7 +48,7 @@ export default function PostCard({post}) {
         </Stack>
         <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
           <Avatar
-            src={'https://avatars0.githubusercontent.com/u/1164541?v=4'}
+            src={PF+post.userPic}
             alt={'Author'}
           />
           <Stack direction={'column'} spacing={0} fontSize={'sm'}>

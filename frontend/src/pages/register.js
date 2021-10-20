@@ -6,7 +6,7 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Checkbox,
+    Divider,
     Stack,
     Button,
     Heading,
@@ -77,6 +77,8 @@ import axios from 'axios';
                 </Button>
                 {error && <Text as="span" color={'red.300'} m={0} p={0}>Something went wrong, try using a new username</Text>}
                 <Text>Already have an account?<Text as="span" color={'blue.400'}><Link to="/login" className="link"> Login</Link></Text></Text>
+                <Divider />
+                <Text>Use Temporary Details to Login <br/> Username: <strong> Temp User</strong><br/>Email: <strong>temp_user@gmail.com</strong> <br/>Password: <strong>temp_user123</strong></Text>
               </Stack>
               </form>
             </Stack>

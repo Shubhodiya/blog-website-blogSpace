@@ -33,6 +33,7 @@ const Write = ()=>{
         e.preventDefault();
         const newPost = {
             username: user.username,
+            userPic: user.profilePic,
             title, 
             desc
         };

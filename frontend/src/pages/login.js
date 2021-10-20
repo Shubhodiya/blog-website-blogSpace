@@ -12,6 +12,7 @@ import {
     Heading,
     Text,
     useColorModeValue,
+    Divider,
   } from '@chakra-ui/react';
 import { Context } from '../context/Context';
 import axios from 'axios';
@@ -87,6 +88,8 @@ import axios from 'axios';
                 </Button>
                 {error && <Text as="span" color={'red.300'} m={0} p={0}>Something went wrong, check your credentials</Text>}
                 <Text>New to BlogSpace; ?<Text as="span" color={'blue.400'}><Link to="/register" className="link"> Create Account</Link></Text></Text>
+                <Divider/>
+                <Text>Use Temporary Details to Login <br/> Username: <strong> Temp User</strong><br/>Email: <strong>temp_user@gmail.com</strong> <br/>Password: <strong>temp_user123</strong></Text>
                 </Stack>
               </Stack>
               </form>

@@ -15,6 +15,10 @@ const PostSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    userPic: {
+        type: String,
+        default:""
+    },
     postCover:{
         type: String,
         default:""

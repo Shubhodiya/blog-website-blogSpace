@@ -9,21 +9,17 @@ import Write from './pages/write';
 import SinglePost from './pages/SinglePost';
 import {
   ChakraProvider,
-  Divider,
   Box,
-  Heading,
-  Text,
   Flex,
-  Spacer,
-  HStack,
-  Center,
   theme
 } from '@chakra-ui/react';
 import GlobalStyles from './styles/GlobalStyles';
 import { Context } from './context/Context';
+import Settings from './pages/settings';
 
 function App() {
   const {user} =useContext(Context);
+  console.log(user)
   return (
     <ChakraProvider theme={theme}>
       <Router>
@@ -36,6 +32,9 @@ function App() {
             </Route>
             <Route path = "/register">
               <Register/> 
+            </Route>
+            <Route path = "/settings">
+              <Settings/>
             </Route>
             <Route exact path = "/">
               <Home/> 

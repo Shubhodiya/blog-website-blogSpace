@@ -3,14 +3,14 @@ import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import {
   Flex,
   Box,
-  Center,
+  Input,
   Image,
-  Spacer,
+  Textarea,
   Heading,
   Text,
   Divider,
   VStack,
-  HStack,
+  Button,
   Avatar,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -27,13 +27,28 @@ const SinglePost = ()=>{
 
     const PF = "http://localhost:5000/images/"
 
-    const handleEdit=()=>{
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const [updateMode, setUpdateMode] = useState(false);
 
+    const handleEdit=()=>{
+        setUpdateMode(true);
+    }
+
+    const handleUpdate= async ()=>{
+        try {
+            await axios.put(`/posts/${post._id}`, {
+              username: user.username,
+              title,
+              desc,
+            });
+            setUpdateMode(false)
+          } catch (err) {}
     }
 
     const handleDelete= async ()=>{
     try{
-        await axios.delete("/posts/"+path, {data: {username: user.username}})
+        await axios.delete("/posts/"+path, {data: {username: user.username, title, desc}})
         window.location.replace("/")
     }catch(err){
         console.log(err);
@@ -44,7 +59,8 @@ const SinglePost = ()=>{
     useEffect(()=>{
         const getPost = async()=>{
             const res = await axios.get("/posts/"+path);
-            // console.log(res);
+            setTitle(res.data.title);
+            setDesc(res.data.desc)
             setPost(res.data);
         }
         getPost();
@@ -52,9 +68,23 @@ const SinglePost = ()=>{
     return(
         <Flex>
             <VStack w={"100%"}>
+                { 
+                updateMode 
+                ?  
+                <Input 
+                color={"gray.400"}
+                fontSize={"20px"}
+                textAlign={"center"}
+                value={title}
+                type="text" 
+                onChange={e=>setTitle(e.target.value)}
+                /> 
+                : 
                 <Heading my={5}>
-                    {post.title}
+                    {title}
                 </Heading>
+                }
+                    
           
                 {post.postCover && (<Image src={PF + post.postCover}
                 w={"100%"}
@@ -68,15 +98,40 @@ const SinglePost = ()=>{
                 </Link>
                 {post.username === user?.username && 
                     <Box>
-                        <EditIcon onClick={handleEdit} color={"blue.300"} h={5} w={5} mx={2}/>
-                        <DeleteIcon onClick={handleDelete} color={"red.300"} h={5} w={5} mx={2}/>
+                        <EditIcon onClick={handleEdit} cursor={"pointer"} color={"blue.300"} h={5} w={5} mx={2}/>
+                        <DeleteIcon onClick={handleDelete} cursor={"pointer"} color={"red.300"} h={5} w={5} mx={2}/>
                     </Box>
                 }
                 </VStack> 
+                
+                { 
+                updateMode 
+                ?  
+                <Textarea color={"gray.400"} placeholder="Start writing here..." 
+                onChange={e=>setDesc(e.target.value)}
+                type="text" 
+                value={desc}
+                height={"180px"}/>
+                : 
                 <Text>
                 {post.desc}
-                {/* {console.log(post.categories)} */}
                 </Text>
+                }
+                {
+                    updateMode && 
+                <Button bg={'blue.400'}
+                type={"submit"}
+                color={'white'}
+                _hover={{
+                bg: 'blue.500',   
+                }}
+                onClick={handleUpdate}>
+                Save Changes
+                </Button>
+                }
+
+                {/* {console.log(post.categories)} */}
+                
                 { post.categories && <Text>{ post.categories.map((cat)=>{
                     return  <Link key={cat} to={`/?category=${cat}`}><small > | {cat +" | "}</small></Link>
                 })
